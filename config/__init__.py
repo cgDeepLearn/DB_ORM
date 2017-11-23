@@ -1,1 +1,1 @@
-from .conf import get_db_args, get_db_type
+from .conf import get_db_args, get_db_type, BASE_DIR
