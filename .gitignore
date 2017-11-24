@@ -114,4 +114,7 @@ dbenv/
 # temp data
 sqlite*
 
+# logfiles
+logs/
+
 

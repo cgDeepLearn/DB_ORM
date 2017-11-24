@@ -10,7 +10,7 @@ from .models import UserInfo
 from .utils import Base, eng, DBsession
 
 
-def create_all(dbindex=0):
+def create_all():
     """创建数据库"""
     Base.metadata.create_all(eng)
 
@@ -31,7 +31,7 @@ class UserInfoOperation():
     def add(cls, data):
         session.add(data)
         session.commit()
-    
+
     @classmethod
     def add_all(cls, datas):
         try:
