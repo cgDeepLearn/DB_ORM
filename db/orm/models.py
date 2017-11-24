@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from utils import Base
+from .utils import Base
 
 
 # class User(Base):
@@ -21,6 +21,7 @@ from utils import Base
 #     user_id = Column(Integer, ForeignKey('user.id'))
 
 class UserInfo(Base):
+    """userinfo 表"""
     __tablename__ = 'userinfo'
 
     id = Column(Integer, primary_key=True)
@@ -31,5 +32,5 @@ class UserInfo(Base):
     watch = Column(Integer)
 
     def __repr__(self):
-        return "<UserIno(mid=%s,name=%s,fans=%d,videonum=%s,watch=%d)>" %(
-                self.mid, self.name, self.fans, self.videonum,self.watch)
+        return "<UserIno(mid=%s,name=%s,fans=%d,videonum=%s,watch=%d)>" % (
+            self.mid, self.name, self.fans, self.videonum, self.watch)

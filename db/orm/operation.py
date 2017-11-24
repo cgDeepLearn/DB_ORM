@@ -1,17 +1,66 @@
-import sys
-sys.path.append('.')
-from models import UserInfo
-from utils import Base, DBsession, eng
+# -*- coding:utf-8 -*-
+"""
+orm operation
+"""
+from sqlalchemy import text
+from sqlalchemy.exc import IntegrityError as SqlalchemyIntegrityError
+from sqlalchemy.exc import InvalidRequestError
+from pymysql.err import IntegrityError as PymysqlIntegrityError
+from .models import UserInfo
+from .utils import Base, eng, DBsession
 
 
-if __name__ == "__main__":
+def create_all(dbindex=0):
+    """创建数据库"""
     Base.metadata.create_all(eng)
-    info = [('10','xiaowang',100,10,2000),
-            ('11','小明',1,0,0),
-            ('12','mamamiya~ Boom',30,3,100)]
-    fields = ('mid','name','fans','videonum','watch')
-    user_list = (UserInfo(**dict(zip(fields,i))) for i in info)
-    session = DBsession()
-    session.add_all(user_list)
-    session.commit()
-    session.close()
+
+
+def new_session():
+    """获取访问数据库的session"""
+    return DBsession()
+
+
+session = new_session()
+
+
+class UserInfoOperation():
+    """数据库操作
+    query根据需要添加filter,filter_by,one,all,first,scalar,count,func.count等操作
+    """
+    @classmethod
+    def add(cls, data):
+        session.add(data)
+        session.commit()
+    
+    @classmethod
+    def add_all(cls, datas):
+        try:
+            session.add_all(datas)
+            session.commit()
+        except (SqlalchemyIntegrityError, PymysqlIntegrityError, InvalidRequestError):
+            for data in datas:
+                cls.add(data)
+    
+    @classmethod
+    def query_from_sql(cls, sql):
+        try:
+            res = session.query(UserInfo).from_statement(text(sql)).all()
+            return res
+        except Exception:
+            return None
+
+
+
+# if __name__ == "__main__":
+#     create_all(eng)
+#     info = [('13', '小红', 100, 10, 2000),
+#             ('14', '小花', 1, 0, 0),
+#             ('15', 'Mike', 30, 3, 100)]
+#     fields = ('mid', 'name', 'fans', 'videonum', 'watch')
+#     new_user = (UserInfo(**dict(zip(fields, info[0]))))
+#     user_list = (UserInfo(**dict(zip(fields, i))) for i in info)  # generator
+#     UserInfoOperation.add(new_user)
+#     UserInfoOperation.add_all(user_list)
+#     select_sql = "select * from userinfo where name='小花';"
+#     print(UserInfoOperation.query_from_sql(select_sql))
+#     session.close()

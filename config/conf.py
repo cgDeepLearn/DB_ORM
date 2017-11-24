@@ -27,4 +27,7 @@ def get_db_args(db):
     """
     return dict(CONFIG.items(db))
 
+def get_engine_index():
+    return CONFIG.get('engine', 'dbindex')
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

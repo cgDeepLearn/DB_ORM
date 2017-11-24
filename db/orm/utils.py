@@ -1,8 +1,8 @@
 import os
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from config import get_db_args, get_db_type, BASE_DIR
+from config import get_db_args, get_db_type, get_engine_index, BASE_DIR
 
 
 DSNs = {
@@ -10,6 +10,7 @@ DSNs = {
     'mysql': 'mysql+pymysql://{}:{}@{}/{}?charset=utf8',
     'postgresql': 'postgresql+psycopg2://{}:{}@{}/{}'
 }
+
 
 def get_engine(dbindex=0):
     """dbindex=0
@@ -23,15 +24,16 @@ def get_engine(dbindex=0):
         dbpath = os.path.join(dbDir, args['dbname'])
         connect_str = DSNs[dbtype].format(filepath=dbpath)
     else:
-        connect_str = DSNs[dbtype].format(args['user'],
-            args['password'], args['host'], args['dbname'])
+        connect_str = DSNs[dbtype].format(args['user'], args['password'],
+                                          args['host'], args['dbname'])
     # print(connect_str)
     engine = create_engine(connect_str, encoding='utf-8')
     return engine
 
 # 创建对象的基类
 Base = declarative_base()
-eng = get_engine()
+engine_index = get_engine_index()
+eng = get_engine(engine_index)
 DBsession = sessionmaker(bind=eng)
 
 

@@ -9,8 +9,7 @@ from db.basic import myDataBase
 
 def test():
     insert_sql = "insert into person(name) values('小王');"
-    select_sql = "select * from person;"
-    
+    select_sql = "select * from person;"    
 
     db1 = myDataBase()
     db1.insert(insert_sql)
@@ -43,4 +42,4 @@ CREATE TABLE `person` (
   `age` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
   ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 
-  '''
+'''
